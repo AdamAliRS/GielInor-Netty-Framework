@@ -26,16 +26,16 @@ public class LoginDecoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
         switch (process) {
             case CONNECTING:
-                Pre_Phase_Connecting(channelHandlerContext, byteBuf);
+                prePhaseConnecting(channelHandlerContext, byteBuf);
                 break;
 
             case LOGGING_IN:
-                Pre_Phase_Logging_In(channelHandlerContext, byteBuf, list);
+                prePhaseConnecting(channelHandlerContext, byteBuf, list);
                 break;
         }
     }
 
-    private void Pre_Phase_Connecting(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) {
+    private void prePhaseConnecting(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) {
         if (byteBuf.readableBytes() < 2) {
             return;
         }
@@ -54,7 +54,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
         process = ConnectionStatus.LOGGING_IN;
     }
 
-    private void Pre_Phase_Logging_In(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
+    private void prePhaseConnecting(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
 
         if (byteBuf.readableBytes() < 2) {
             return;

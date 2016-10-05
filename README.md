@@ -1,1 +1,1 @@
-# GielInor-Netty-Framework
+# Gielinor-Netty-Framework
