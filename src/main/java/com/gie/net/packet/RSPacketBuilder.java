@@ -1,4 +1,4 @@
-package com.gie;
+package com.gie.net.packet;
 
 /*
  * This file is part of RuneSource.

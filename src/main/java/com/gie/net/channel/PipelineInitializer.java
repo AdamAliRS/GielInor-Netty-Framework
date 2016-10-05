@@ -1,5 +1,6 @@
-package com.gie;
+package com.gie.net.channel;
 
+import com.gie.net.login.LoginDecoder;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

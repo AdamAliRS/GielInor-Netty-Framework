@@ -1,5 +1,6 @@
-package com.gie;
+package com.gie.net.login;
 
+import com.gie.net.ISAACCipher;
 import io.netty.channel.ChannelHandlerContext;
 
 /**

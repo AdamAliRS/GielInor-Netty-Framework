@@ -1,5 +1,7 @@
-package com.gie;
+package com.gie.net.login;
 
+import com.gie.net.ISAACCipher;
+import com.gie.net.packet.RSPacketBuilder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -49,7 +51,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
         out.writeByte(0);
         out.writeLong(new SecureRandom().nextLong());
         channelHandlerContext.writeAndFlush(out);
-        process = Connection_Status.LOGGING_IN;
+        process = ConnectionStatus.LOGGING_IN;
     }
 
     private void Pre_Phase_Logging_In(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
