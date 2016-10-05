@@ -1,10 +1,14 @@
 package com.gie.net.login;
 
 import com.gie.net.ISAACCipher;
+import com.gie.net.LoginGameDecoder;
 import com.gie.net.packet.RSPacketBuilder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.security.SecureRandom;
@@ -23,30 +27,34 @@ public class LoginDecoder extends ByteToMessageDecoder {
     private ConnectionStatus process = ConnectionStatus.CONNECTING;
 
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf buffer, List<Object> list) throws Exception {
         switch (process) {
             case CONNECTING:
-                prePhaseConnecting(channelHandlerContext, byteBuf);
+                prePhaseConnecting(channelHandlerContext, buffer);
                 break;
 
             case LOGGING_IN:
-                prePhaseConnecting(channelHandlerContext, byteBuf, list);
+                prePhaseConnecting(channelHandlerContext, buffer, list);
                 break;
         }
     }
 
-    private void prePhaseConnecting(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) {
-        if (byteBuf.readableBytes() < 2) {
+    private void prePhaseConnecting(ChannelHandlerContext channelHandlerContext, ByteBuf buffer) {
+        if (buffer.readableBytes() < 2) {
             return;
         }
 
-        int request = byteBuf.readUnsignedByte();
+        int request = buffer.readUnsignedByte();
 
         if (request != 14) {
             System.err.println("Invalid request " + request);
             return;
         }
         ByteBuf out = Unpooled.buffer(18);
+        /**
+         * Client ignores the first 7 bytes sent by the server
+         * long - 7 bytes
+         */
         out.writeLong(0);
         out.writeByte(0);
         out.writeLong(new SecureRandom().nextLong());
@@ -54,50 +62,50 @@ public class LoginDecoder extends ByteToMessageDecoder {
         process = ConnectionStatus.LOGGING_IN;
     }
 
-    private void prePhaseConnecting(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
+    private void prePhaseConnecting(ChannelHandlerContext channelHandlerContext, ByteBuf buffer, List<Object> list) {
 
-        if (byteBuf.readableBytes() < 2) {
+        if (buffer.readableBytes() < 2) {
             return;
         }
-        int loginType = byteBuf.readUnsignedByte();
+        int loginType = buffer.readUnsignedByte();
         if (loginType != 16 && loginType != 18) {
             System.err.println("Invalid login type " + loginType);
             return;
         }
 
-        int blockDataLength = byteBuf.readUnsignedByte();
+        int blockDataLength = buffer.readUnsignedByte();
 
-        if (byteBuf.readableBytes() > blockDataLength) {
+        if (buffer.readableBytes() > blockDataLength) {
             System.err.println("[LOGINDECODER] Pre_Phase_Logging_In");
             return;
         }
-        if (byteBuf.isReadable(blockDataLength)) {
+        if (buffer.isReadable(blockDataLength)) {
 
-            byteBuf.readUnsignedByte(); //Skips -> MagicId[255]
+            buffer.readUnsignedByte(); //Skips -> MagicId[255]
 
-            int revision = byteBuf.readShort();
+            int revision = buffer.readShort();
 
             if (revision != 317) {
                 System.err.println("Invalid Client version " + revision);
                 return;
             }
 
-            byteBuf.readUnsignedByte(); //Skips -> Memory Usage
+            buffer.readUnsignedByte(); //Skips -> Memory Usage
 
             for (int i = 0; i < 9; i++) {
-                byteBuf.readInt(); //Skips -> CRC keys -> Looping same amount as Client
+                buffer.readInt(); //Skips -> CRC keys -> Looping same amount as Client
             }
 
-            byteBuf.readUnsignedByte(); //Skips -> RSA Block TODO: RSA
+            buffer.readUnsignedByte(); //Skips -> RSA Block TODO: RSA
 
-            int rsaOpcode = byteBuf.readUnsignedByte();
+            int rsaOpcode = buffer.readUnsignedByte();
             if (rsaOpcode != 10) {
                 System.err.println("Invalid RSA opcode " + rsaOpcode);
                 return;
             }
 
-            long clientHalf = byteBuf.readLong();
-            long serverHalf = byteBuf.readLong();
+            long clientHalf = buffer.readLong();
+            long serverHalf = buffer.readLong();
             int[] sessionKey = {(int) (clientHalf >> 32), (int) clientHalf, (int) (serverHalf >> 32), (int) serverHalf};
             ISAACCipher inCipher = new ISAACCipher(sessionKey);
             for (int i = 0; i < 4; i++) {
@@ -106,14 +114,13 @@ public class LoginDecoder extends ByteToMessageDecoder {
 
             ISAACCipher outCipher = new ISAACCipher(sessionKey);
 
-            byteBuf.readInt();
+            buffer.readInt();
 
-            String username = RSPacketBuilder.getRS2String(byteBuf);
-            String password = RSPacketBuilder.getRS2String(byteBuf);
+            String username = RSPacketBuilder.getRS2String(buffer);
+            String password = RSPacketBuilder.getRS2String(buffer);
 
             list.add(new PlaceholderPlayer(username, password, inCipher, outCipher, channelHandlerContext));
         }
     }
-
 
 }
