@@ -1,7 +1,8 @@
-package com.gie.net;
+package com.gie.net.packet.in;
 
 import com.gie.NetworkConstants;
-import com.gie.net.packet.HandleIncomingPackets;
+import com.gie.net.ISAACCipher;
+import com.gie.net.packet.in.HandleIncomingPackets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,14 +13,13 @@ import java.util.List;
 /**
  * Created by Adam on 05/10/2016.
  */
-public class LoginGameDecoder extends ByteToMessageDecoder {
+public class IncomingPacketDecoder extends ByteToMessageDecoder {
 
 
     private ISAACCipher isaacDecrypt;
 
-    public LoginGameDecoder(ISAACCipher isaacDecrypt) {
+    public IncomingPacketDecoder(ISAACCipher isaacDecrypt) {
         this.isaacDecrypt = isaacDecrypt;
-
     }
 
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {

@@ -6,7 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 /**
  * Created by Adam on 05/10/2016.
  */
-public class PlaceholderPlayer {
+public class LoginDetails {
 
     private String username;
     private String password;
@@ -14,12 +14,11 @@ public class PlaceholderPlayer {
     private ISAACCipher out;
     private ChannelHandlerContext channel;
 
-    public PlaceholderPlayer(String username, String password, ISAACCipher in, ISAACCipher out, ChannelHandlerContext channel) {
+    public LoginDetails(String username, String password, ISAACCipher in, ISAACCipher out) {
         this.username = username;
         this.password = password;
         this.in = in;
         this.out = out;
-        this.channel = channel;
     }
 
 }

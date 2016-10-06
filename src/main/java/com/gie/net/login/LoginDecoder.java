@@ -1,14 +1,10 @@
 package com.gie.net.login;
 
 import com.gie.net.ISAACCipher;
-import com.gie.net.LoginGameDecoder;
 import com.gie.net.packet.RSPacketBuilder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.security.SecureRandom;
@@ -119,7 +115,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
             String username = RSPacketBuilder.getRS2String(buffer);
             String password = RSPacketBuilder.getRS2String(buffer);
 
-            list.add(new PlaceholderPlayer(username, password, inCipher, outCipher, channelHandlerContext));
+            list.add(new LoginDetails(username, password, inCipher, outCipher, channelHandlerContext));
         }
     }
 
