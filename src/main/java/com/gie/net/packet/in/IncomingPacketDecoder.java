@@ -2,7 +2,6 @@ package com.gie.net.packet.in;
 
 import com.gie.NetworkConstants;
 import com.gie.net.ISAACCipher;
-import com.gie.net.packet.in.HandleIncomingPackets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

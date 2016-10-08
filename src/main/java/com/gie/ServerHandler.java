@@ -17,14 +17,14 @@ public final class ServerHandler {
 
     private final ServerBootstrap bootstrap = new ServerBootstrap();
 
+
     public ServerHandler bind(int port) {
         LOGGER.info("Attempting to estabilish connection on port " + port);
         EventLoopGroup mainEventLoopGroup = new NioEventLoopGroup(1);
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         bootstrap.group(mainEventLoopGroup, eventLoopGroup)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(new PipelineInitializer())
-                .bind(port);
+                .childHandler(new PipelineInitializer()).bind(port);
         LOGGER.info("Connection estabilished on port " + port);
         return this;
     }

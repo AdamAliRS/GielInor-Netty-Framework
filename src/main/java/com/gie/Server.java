@@ -1,6 +1,8 @@
 package com.gie;
 
 import com.google.common.base.Stopwatch;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
 
 import java.util.concurrent.TimeUnit;
 

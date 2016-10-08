@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 import java.util.List;
 
 /**
+ * Decodes all login requests
  * Created by Adam on 05/10/2016.
  */
 public class LoginDecoder extends ByteToMessageDecoder {
@@ -30,93 +31,91 @@ public class LoginDecoder extends ByteToMessageDecoder {
                 break;
 
             case LOGGING_IN:
-                prePhaseConnecting(channelHandlerContext, buffer, list);
+                prePhaseLogging(channelHandlerContext, buffer, list);
                 break;
         }
     }
 
     private void prePhaseConnecting(ChannelHandlerContext channelHandlerContext, ByteBuf buffer) {
-        if (buffer.readableBytes() < 2) {
-            return;
+        if (buffer.readableBytes() >= 2) {
+            int request = buffer.readUnsignedByte();
+
+            if (request != 14 && request != 15) {
+                return;
+            }
+
+            buffer.readUnsignedByte();
+            ByteBuf buf = Unpooled.buffer(17);
+            buf.writeLong(0);
+            buf.writeByte(0);
+            buf.writeLong(new SecureRandom().nextLong());
+            channelHandlerContext.writeAndFlush(buf);
+            process = ConnectionStatus.LOGGING_IN;
         }
 
-        int request = buffer.readUnsignedByte();
 
-        if (request != 14) {
-            System.err.println("Invalid request " + request);
-            return;
-        }
-        ByteBuf out = Unpooled.buffer(18);
-        /**
-         * Client ignores the first 7 bytes sent by the server
-         * long - 7 bytes
-         */
-        out.writeLong(0);
-        out.writeByte(0);
-        out.writeLong(new SecureRandom().nextLong());
-        channelHandlerContext.writeAndFlush(out);
-        process = ConnectionStatus.LOGGING_IN;
     }
 
-    private void prePhaseConnecting(ChannelHandlerContext channelHandlerContext, ByteBuf buffer, List<Object> list) {
+    private int blockDataLength;
+
+    private void prePhaseLogging(ChannelHandlerContext channelHandlerContext, ByteBuf buffer, List<Object> list) {
 
         if (buffer.readableBytes() < 2) {
             return;
         }
-        int loginType = buffer.readUnsignedByte();
-        if (loginType != 16 && loginType != 18) {
-            System.err.println("Invalid login type " + loginType);
+        int request = buffer.readUnsignedByte();
+
+        if (request != 16 && request != 18) {
+            System.err.println("[Invalid login type " + request);
             return;
         }
 
-        int blockDataLength = buffer.readUnsignedByte();
+        blockDataLength = buffer.readUnsignedByte();
 
-        if (buffer.readableBytes() > blockDataLength) {
+        if (buffer.readableBytes() < blockDataLength) {
             System.err.println("[LOGINDECODER] Pre_Phase_Logging_In");
             return;
         }
-        if (buffer.isReadable(blockDataLength)) {
 
-            buffer.readUnsignedByte(); //Skips -> MagicId[255]
+        buffer.readUnsignedByte();
 
-            int revision = buffer.readShort();
+        int clientVersion = buffer.readShort();
 
-            if (revision != 317) {
-                System.err.println("Invalid Client version " + revision);
-                return;
-            }
-
-            buffer.readUnsignedByte(); //Skips -> Memory Usage
-
-            for (int i = 0; i < 9; i++) {
-                buffer.readInt(); //Skips -> CRC keys -> Looping same amount as Client
-            }
-
-            buffer.readUnsignedByte(); //Skips -> RSA Block TODO: RSA
-
-            int rsaOpcode = buffer.readUnsignedByte();
-            if (rsaOpcode != 10) {
-                System.err.println("Invalid RSA opcode " + rsaOpcode);
-                return;
-            }
-
-            long clientHalf = buffer.readLong();
-            long serverHalf = buffer.readLong();
-            int[] sessionKey = {(int) (clientHalf >> 32), (int) clientHalf, (int) (serverHalf >> 32), (int) serverHalf};
-            ISAACCipher inCipher = new ISAACCipher(sessionKey);
-            for (int i = 0; i < 4; i++) {
-                sessionKey[i] += 50;
-            }
-
-            ISAACCipher outCipher = new ISAACCipher(sessionKey);
-
-            buffer.readInt();
-
-            String username = RSPacketBuilder.getRS2String(buffer);
-            String password = RSPacketBuilder.getRS2String(buffer);
-
-            list.add(new LoginDetails(username, password, inCipher, outCipher, channelHandlerContext));
+        if (clientVersion != 317) {
+            System.err.println("Invalid client version " + clientVersion);
+            return;
         }
+
+        buffer.readUnsignedByte();
+        for (int i = 0; i < 9; i++) {
+            buffer.readInt(); //Skips -> CRC keys -> Looping same amount as Client
+        }
+
+
+        buffer.readUnsignedByte(); //Skips -> RSA Block TODO: RSA
+
+        int rsaOpcode = buffer.readUnsignedByte();
+        if (rsaOpcode != 10) {
+            System.err.println("Invalid RSA opcode " + rsaOpcode);
+            return;
+        }
+
+        long clientHalf = buffer.readLong();
+        long serverHalf = buffer.readLong();
+        int[] sessionKey = {(int) (clientHalf >> 32), (int) clientHalf, (int) (serverHalf >> 32), (int) serverHalf};
+        ISAACCipher inCipher = new ISAACCipher(sessionKey);
+        for (int i = 0; i < 4; i++) {
+            sessionKey[i] += 50;
+        }
+
+        ISAACCipher outCipher = new ISAACCipher(sessionKey);
+
+        buffer.readInt();
+
+        String username = RSPacketBuilder.getRS2String(buffer);
+        String password = RSPacketBuilder.getRS2String(buffer);
+        System.out.println("Logging in");
+        list.add(new LoginDetails(username, password, inCipher, outCipher));
     }
 
 }

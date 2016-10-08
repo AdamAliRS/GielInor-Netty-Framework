@@ -18,7 +18,7 @@ public class HandleIncomingPackets {
     public HandleIncomingPackets(int opCode, int size, ByteBuf buffer) {
         this.opCode = opCode;
         this.size = size;
-        this.buffer =buffer;
+        this.buffer = buffer;
     }
 
     public int getOpCode() {

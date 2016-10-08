@@ -18,7 +18,21 @@ public class LoginDetails {
         this.username = username;
         this.password = password;
         this.in = in;
-        this.out = out;
+        this.out =    out;
+}
+
+    public String getUsername() {
+        return username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+    public ChannelHandlerContext getChannel() {
+        return channel;
+    }
+
+    public ISAACCipher getOut() {
+        return out;
+    }
 }
