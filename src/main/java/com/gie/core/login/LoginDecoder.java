@@ -1,6 +1,6 @@
 package com.gie.core.login;
 
-import com.gie.core.packet.RSPacketBuilder;
+import com.gie.core.packet.PacketBuilder;
 import com.gie.core.codec.ISAACCipher;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -108,8 +108,9 @@ public class LoginDecoder extends ByteToMessageDecoder {
 
         buffer.readInt();
 
-        String username = RSPacketBuilder.getRS2String(buffer);
-        String password = RSPacketBuilder.getRS2String(buffer);
+        PacketBuilder builder = new PacketBuilder(buffer);
+        String username = builder.getString();
+        String password = builder.getString();
         System.out.println("Logging in");
         list.add(new LoginHandler(username, password, inCipher, outCipher, channelHandlerContext));
     }

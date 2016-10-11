@@ -15,6 +15,7 @@ public class Player extends Entity {
     private String address;
 
     public Player(LoginSession session) {
+        super();
         this.session = session;
     }
 

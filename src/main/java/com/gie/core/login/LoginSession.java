@@ -28,6 +28,7 @@ public class LoginSession extends SessionHandler {
         return player;
     }
 
+
     private LoginResponses responses = LoginResponses.LOGIN_SUCCESSFUL;
 
     @Override
@@ -55,7 +56,7 @@ public class LoginSession extends SessionHandler {
         }
 
         future.awaitUninterruptibly();
-        channel.pipeline().replace("login-decoder", "incoming-decoder", new GameDecoder(details.getIn()));
+        channel.pipeline().replace("login-decoder", "incoming-decoder", new GameDecoder(details.getOut()));
 
         System.out.println("Registered " + player.getUsername());
         World.getWorld().addPlayer(player);
