@@ -1,8 +1,8 @@
 package com.gie;
 
+import com.gie.core.Bootstrap;
+import com.gie.core.NetworkConstants;
 import com.google.common.base.Stopwatch;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +13,7 @@ public class Server {
 
     public static void main(String[] args) {
         Stopwatch timer = Stopwatch.createStarted();
-        new ServerHandler().bind(NetworkConstants.PORT);
+        new Bootstrap().bind(NetworkConstants.PORT);
         timer.stop();
         System.out.println("Time taken to start server: " + timer.elapsed(TimeUnit.MILLISECONDS) +"ms");
     }

@@ -1,11 +1,11 @@
-package com.gie.net.packet.in;
+package com.gie.core.packet;
 
 import io.netty.buffer.ByteBuf;
 
 /**
  * Created by Adam on 05/10/2016.
  */
-public class HandleIncomingPackets {
+public class PacketHandling {
     /**
      * Repersents a single packet
      */
@@ -15,7 +15,7 @@ public class HandleIncomingPackets {
 
     private ByteBuf buffer;
 
-    public HandleIncomingPackets(int opCode, int size, ByteBuf buffer) {
+    public PacketHandling(int opCode, int size, ByteBuf buffer) {
         this.opCode = opCode;
         this.size = size;
         this.buffer = buffer;

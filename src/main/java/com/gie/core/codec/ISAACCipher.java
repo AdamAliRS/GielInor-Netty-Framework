@@ -1,4 +1,4 @@
-package com.gie.net;
+package com.gie.core.codec;
 
 /**
  * <p>An implementation of an ISAAC cipher. See

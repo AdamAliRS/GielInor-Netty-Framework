@@ -1,4 +1,7 @@
-package com.gie;
+package com.gie.core;
+
+import com.gie.core.login.LoginSession;
+import io.netty.util.AttributeKey;
 
 /**
  * Created by Adam on 05/10/2016.
@@ -6,7 +9,6 @@ package com.gie;
 public final class NetworkConstants {
 
     public static final int PORT = 43594;
-
 
     public static final int PACKET_SIZES[] = { //
             //
@@ -37,6 +39,10 @@ public final class NetworkConstants {
             0, 4, 0, 0, 0, 0, -1, 0, -1, 4,// 240
             0, 0, 6, 6, 0, 0, 0 // 250
     };
+
+    public static final AttributeKey<LoginSession> SESSION_KEY = AttributeKey.valueOf("sessionKey");
+
+
 
 
     private NetworkConstants() {

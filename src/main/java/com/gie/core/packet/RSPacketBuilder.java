@@ -1,4 +1,4 @@
-package com.gie.net.packet;
+package com.gie.core.packet;
 
 import io.netty.buffer.ByteBuf;
 

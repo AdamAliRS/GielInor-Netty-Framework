@@ -1,7 +1,7 @@
-package com.gie.net.login;
+package com.gie.core.login;
 
-import com.gie.net.ISAACCipher;
-import com.gie.net.packet.RSPacketBuilder;
+import com.gie.core.packet.RSPacketBuilder;
+import com.gie.core.codec.ISAACCipher;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,12 +16,8 @@ import java.util.List;
  */
 public class LoginDecoder extends ByteToMessageDecoder {
 
-    private enum ConnectionStatus {
-        CONNECTING,
-        LOGGING_IN
-    }
 
-    private ConnectionStatus process = ConnectionStatus.CONNECTING;
+    private LoginDecoderState process = LoginDecoderState.CONNECTING;
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf buffer, List<Object> list) throws Exception {
@@ -50,7 +46,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
             buf.writeByte(0);
             buf.writeLong(new SecureRandom().nextLong());
             channelHandlerContext.writeAndFlush(buf);
-            process = ConnectionStatus.LOGGING_IN;
+            process = LoginDecoderState.LOGGING_IN;
         }
 
 
@@ -115,7 +111,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
         String username = RSPacketBuilder.getRS2String(buffer);
         String password = RSPacketBuilder.getRS2String(buffer);
         System.out.println("Logging in");
-        list.add(new LoginDetails(username, password, inCipher, outCipher));
+        list.add(new LoginHandler(username, password, inCipher, outCipher, channelHandlerContext));
     }
 
 }
