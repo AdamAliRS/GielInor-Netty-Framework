@@ -1,6 +1,6 @@
 package com.gie;
 
-import com.gie.core.Bootstrap;
+import com.gie.core.NetworkBootstrap;
 import com.gie.core.NetworkConstants;
 import com.google.common.base.Stopwatch;
 
@@ -13,7 +13,7 @@ public class Server {
 
     public static void main(String[] args) {
         Stopwatch timer = Stopwatch.createStarted();
-        new Bootstrap().bind(NetworkConstants.PORT);
+        new NetworkBootstrap().bind(NetworkConstants.PORT);
         timer.stop();
         System.out.println("Time taken to start server: " + timer.elapsed(TimeUnit.MILLISECONDS) +"ms");
     }

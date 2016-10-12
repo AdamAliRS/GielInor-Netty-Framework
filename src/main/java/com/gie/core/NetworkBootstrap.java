@@ -12,13 +12,13 @@ import java.util.logging.Logger;
 /**
  * Created by Adam on 05/10/2016.
  */
-public final class Bootstrap {
+public final class NetworkBootstrap {
 
-    Logger LOGGER = Logger.getLogger(Bootstrap.class.getName());
+    Logger LOGGER = Logger.getLogger(NetworkBootstrap.class.getName());
 
     private final ServerBootstrap bootstrap = new ServerBootstrap();
 
-    public Bootstrap bind(int port) {
+    public NetworkBootstrap bind(int port) {
         LOGGER.info("Attempting to establish connection on port " + port);
         EventLoopGroup mainEventLoopGroup = new NioEventLoopGroup(1);
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();

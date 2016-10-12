@@ -1,27 +1,16 @@
 package com.gie.game;
 
-import com.gie.game.entity.Entity;
-import com.gie.game.entity.EntityList;
-import com.gie.game.entity.player.Player;
+import com.gie.game.entity.EntityCollection;
 
 /**
- * Created by Adam on 09/10/2016.
+ * Created by Adam on 12/10/2016.
  */
 public class World {
 
-    private static final World world = new World();
+    private static EntityCollection entity = new EntityCollection();
 
-    private EntityList<Player> players = new EntityList<>(1000);
-
-    public void addPlayer(Entity entity) {
-        if (entity.isPlayer()) {
-            Player player = (Player) entity;
-            players.add(player);
-            System.out.println("Player Added " + player.getUsername());
-        }
+    public static EntityCollection getEntity() {
+        return entity;
     }
 
-    public static World getWorld() {
-        return world;
-    }
 }

@@ -2,8 +2,8 @@ package com.gie.core.login;
 
 import com.gie.core.channel.SessionHandler;
 import com.gie.core.login.game.GameDecoder;
-import com.gie.game.entity.player.Player;
 import com.gie.game.World;
+import com.gie.game.entity.player.Player;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -39,7 +39,7 @@ public class LoginSession extends SessionHandler {
         LoginHandler details = (LoginHandler) o;
         SocketChannel channel = (SocketChannel) details.getChannel().channel();
 
-        Player player = this.getPlayer();
+        Player player = getPlayer();
 
         String username = details.getUsername();
         String password = details.getPassword();
@@ -59,6 +59,6 @@ public class LoginSession extends SessionHandler {
         channel.pipeline().replace("login-decoder", "incoming-decoder", new GameDecoder(details.getOut()));
 
         System.out.println("Registered " + player.getUsername());
-        World.getWorld().addPlayer(player);
+        World.getEntity().add(player);
     }
 }

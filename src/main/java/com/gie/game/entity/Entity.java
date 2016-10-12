@@ -38,7 +38,6 @@ public abstract class Entity {
     }
 
     public boolean isPlayer() {
-
         return getClass() == Player.class;
     }
 
