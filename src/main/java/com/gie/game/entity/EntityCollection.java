@@ -10,8 +10,12 @@ import java.util.Iterator;
  */
 public class EntityCollection<T extends Entity> implements Collection<T> {
 
-    private Entity[] entity = new Entity[Constants.ENTITY_CAPACITY];
+    private Entity[] entity;
 
+
+    public EntityCollection(int capacity) {
+        entity = new Entity[capacity];
+    }
     @Override
     public int size() {
         return 0;

@@ -7,7 +7,7 @@ import com.gie.game.Tile;
  */
 public final class Constants {
 
-    public static final int ENTITY_CAPACITY = 4000;
+    public static final int PLAYER_MAXIMUM = 1000;
 
     public static Tile HOME = new Tile(3093, 3493, 0);
 

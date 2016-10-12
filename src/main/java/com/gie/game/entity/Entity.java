@@ -2,6 +2,7 @@ package com.gie.game.entity;
 
 import com.gie.Constants;
 import com.gie.game.Tile;
+import com.gie.game.World;
 import com.gie.game.entity.player.Player;
 
 /**
@@ -37,10 +38,6 @@ public abstract class Entity {
         return tile.getHeight();
     }
 
-    public boolean isPlayer() {
-        return getClass() == Player.class;
-    }
-
     public int getIndex() {
         return index;
     }
@@ -48,6 +45,5 @@ public abstract class Entity {
     public void setIndex(int index) {
         this.index = index;
     }
-
 }
 
