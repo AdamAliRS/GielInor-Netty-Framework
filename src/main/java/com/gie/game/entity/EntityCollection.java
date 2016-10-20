@@ -12,13 +12,16 @@ public class EntityCollection<T extends Entity> implements Collection<T> {
     //TODO : Complete
     private Entity[] entity;
 
+    private int size = 0;
+
     public EntityCollection(int capacity) {
         entity = new Entity[capacity];
     }
 
+
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -51,9 +54,14 @@ public class EntityCollection<T extends Entity> implements Collection<T> {
         for (int i = 0; i < capacity(); i++) {
             entity[i] = t;
             t.setIndex(i);
+            size++;
             return true;
         }
         return false;
+    }
+
+    public boolean isFull() {
+        return size == entity.length;
     }
 
     public int capacity() {

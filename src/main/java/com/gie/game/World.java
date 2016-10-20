@@ -17,9 +17,19 @@ public class World {
 
     private EntityCollection<Player> players = new EntityCollection(ServerConfiguration.PLAYER_MAXIMUM);
 
+    /**
+     * TODO later
+     * Dummy updating variable for login responses
+     */
+    private boolean updating;
+
     public void addPlayer(Player player) {
         players.add(player);
         LOGGER.info("Player added " + player.getUsername());
+    }
+
+    public boolean isUpdating() {
+        return updating;
     }
 
     public EntityCollection<Player> getPlayers() {

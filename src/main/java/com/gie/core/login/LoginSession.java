@@ -29,7 +29,7 @@ public class LoginSession extends SessionHandler {
     }
 
 
-    private World world;
+    private World world = new World();
 
     private LoginResponses responses = LoginResponses.LOGIN_SUCCESSFUL;
 
@@ -38,6 +38,7 @@ public class LoginSession extends SessionHandler {
         if (!(o instanceof LoginHandler)) {
             return;
         }
+
         LoginHandler details = (LoginHandler) o;
         SocketChannel channel = (SocketChannel) details.getChannel().channel();
 
@@ -49,10 +50,23 @@ public class LoginSession extends SessionHandler {
         player.setPassword(password);
         player.setAddress(address);
 
+        if (world.isUpdating()) {
+            responses = LoginResponses.SERVER_IS_BEING_UPDATED;
+        }
+
+        if (world.getPlayers().isFull()) {
+            responses = LoginResponses.WORLD_IS_FULL;
+        }
+
+        if (password != player.getPassword()) {
+            responses = LoginResponses.FALSE_CREDENTIALS;
+        }
+
         ChannelFuture future = channel.writeAndFlush(new LoginResponseHandler(responses, 0, false));
 
         if (responses != LoginResponses.LOGIN_SUCCESSFUL) {
             future.addListener(ChannelFutureListener.CLOSE);
+            return;
         }
 
         future.awaitUninterruptibly();
