@@ -2,7 +2,7 @@ package com.gie.core.login.game;
 
 import com.gie.core.NetworkConstants;
 import com.gie.core.codec.ISAACCipher;
-import com.gie.core.packet.PacketHandling;
+import com.gie.core.packet.GameMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,11 +34,9 @@ public class GameDecoder extends ByteToMessageDecoder {
             if (byteBuf.readableBytes() >= size) {
                 final byte[] buf = new byte[size];
                 byteBuf.readBytes(buf);
-
                 ByteBuf buffer = Unpooled.buffer(size);
                 buffer.writeBytes(buf);
-
-                list.add(new PacketHandling(opcode, size, buffer));
+                list.add(new GameMessage(opcode, size, buffer));
             }
         }
 

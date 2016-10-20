@@ -12,10 +12,8 @@ public class ChannelHandler extends SimpleChannelInboundHandler {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
         if (channelHandlerContext.channel().isOpen()) {
-
             SessionHandler session = channelHandlerContext.channel().attr(NetworkConstants.SESSION_KEY).get();
             session.receieveMessage(o);
         }
-
     }
 }

@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * Created by Adam on 05/10/2016.
  */
-public class PacketHandling {
+public class GameMessage {
     /**
      * Repersents a single packet
      */
@@ -15,7 +15,7 @@ public class PacketHandling {
 
     private ByteBuf buffer;
 
-    public PacketHandling(int opCode, int size, ByteBuf buffer) {
+    public GameMessage(int opCode, int size, ByteBuf buffer) {
         this.opCode = opCode;
         this.size = size;
         this.buffer = buffer;

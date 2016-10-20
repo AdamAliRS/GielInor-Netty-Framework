@@ -1,6 +1,5 @@
 package com.gie.game.entity;
 
-import com.gie.Constants;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -8,14 +7,15 @@ import java.util.Iterator;
 /**
  * Created by Adam on 12/10/2016.
  */
+
 public class EntityCollection<T extends Entity> implements Collection<T> {
-
+    //TODO : Complete
     private Entity[] entity;
-
 
     public EntityCollection(int capacity) {
         entity = new Entity[capacity];
     }
+
     @Override
     public int size() {
         return 0;

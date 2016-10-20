@@ -1,13 +1,14 @@
 package com.gie.game.entity;
 
-import com.gie.Constants;
+import com.gie.ServerConfiguration;
+import com.gie.game.GameConstants;
 import com.gie.game.Tile;
-import com.gie.game.World;
-import com.gie.game.entity.player.Player;
 
 /**
  * Created by Adam on 02/10/2016.
  */
+
+
 public abstract class Entity {
 
     private int index = -1;
@@ -15,7 +16,7 @@ public abstract class Entity {
     private Tile tile;
 
     public Entity() {
-        setTile(Constants.HOME);
+        setTile(GameConstants.DEFAULT_LOCATION);
     }
 
     public Tile getTile() {

@@ -11,6 +11,10 @@ No real purpose for this as there are better Netty frameworks out there, so it's
 
 **No Specific Order**
 
+[Apollo](https://github.com/apollo-rsps/apollo) & all its contributers <3
+
+[Graham](https://www.rune-server.org/members/graham/) 
+
 [Free(SeVen)](https://www.rune-server.org/members/free/) - Reference to his server :)
 
 PI Helpline Chat
@@ -24,5 +28,3 @@ Kaleem
 Dennis
 
 Carlos - For inspirational Flash quotes
-
-[Graham](https://www.rune-server.org/members/graham/) 
